@@ -122,7 +122,7 @@ async function main() {
     
     app.get("/api/test2", (req, res) => {
         res.json({
-            msg: "This data requires authentication",
+            msg: "This data requires full authentication",
         });
     });
     
