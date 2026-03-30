@@ -1,0 +1,14 @@
+client/node_modules/
+.vagrant/
+node_modules/
+tmp/
+ubuntu-xenial-16.04-cloudimg-console.log
+todo.md
+run.log
+example/build/
+authentic/build/
+*.bak
+mock-mailer/build/
+deployment-examples/terraform/.terraform/
+deployment-examples/terraform/terraform.tfstate
+deployment-examples/terraform/terraform.tfstate.backup

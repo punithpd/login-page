@@ -1,0 +1,86 @@
+#
+# Help
+#
+# Docs:
+# https://docs.docker.com/compose/compose-file
+#
+# The z/Z flags for volumes:
+# https://stackoverflow.com/a/35222815/25868
+#
+
+version: '3'
+services:
+
+  db:
+    image: mongo:4.2.8
+    container_name: db
+    ports:
+     - "5003:27017"
+    restart: always
+
+  mailer:
+    image: mailer
+    build: 
+      context: ./mock-mailer
+      dockerfile: Dockerfile-dev
+    container_name: mailer
+    volumes:
+      - ./tmp/mock-mailer/npm-cache:/root/.npm:z
+      - ./mock-mailer/src:/usr/src/app/src:z
+    ports:
+     - "5004:80"
+    environment:
+      - PORT=80
+      - NODE_ENV=development
+    restart: "no"
+
+  authentic:
+    image: authentic
+    build: 
+      context: ./authentic
+      dockerfile: Dockerfile-dev
+    container_name: authentic
+    volumes:
+      - ./tmp/authentic/npm-cache:/root/.npm:z
+      - ./authentic/src:/usr/src/app/src:z
+      - ./authentic/templates:/usr/src/app/templates:z
+    ports:
+     - "5002:80"
+    environment:
+      - PORT=80
+      - DBHOST=mongodb://db:27017
+      - DBNAME=auth
+      - NODE_ENV=development
+      - JWT_SECRET=1234
+    restart: "no"
+
+  example-client:
+    image: example-client
+    build: 
+      context: ./example/client
+      dockerfile: Dockerfile-dev
+    container_name: example-client
+    volumes:
+     - /tmp/example-client/npm-cache:/root/.npm:z
+     - ./example/client/src:/usr/src/app/src:z
+    ports:
+     - "5000:5000"
+    depends_on:
+      - example
+    restart: "no"
+
+  example:
+    image: example
+    build: 
+      context: ./example
+      dockerfile: Dockerfile-dev
+    container_name: example
+    volumes:
+      - /tmp/example/npm-cache:/root/.npm:z
+      - ./example/src:/usr/src/app/src:z
+    ports:
+     - "5001:80"
+    environment:
+      - PORT=80
+    restart: "no"
+
