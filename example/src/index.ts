@@ -74,7 +74,7 @@ async function main() {
 
     app.get("/api/test1", (req, res) => {
         res.json({
-            msg: "This data requires no authentication",
+            msg: "This data requires not authentication",
         });
     });
 
